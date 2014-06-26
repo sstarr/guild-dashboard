@@ -7,7 +7,7 @@ require 'cgi'
 # Config
 # make sure your URLs end with /full, not /simple (which is default)!
 # ------
-calendars = [{name: 'Events', url: 'https://www.google.com/calendar/feeds/t6hpavm69bhba8v755fbb9f4mg%40group.calendar.google.com/private-79bbfea8e61cc910db94b139bef99e65/full'}]
+calendars = [{name: 'Events', url: 'https://www.google.com/calendar/feeds/13jjetu8q6rdv4sj276magr55it4oonn%40import.calendar.google.com/public/full'}]
 events = Array.new
 
 SCHEDULER.every '10m', :first_in => 0 do |job|
