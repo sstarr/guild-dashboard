@@ -1,0 +1,34 @@
+<script type='text/javascript'>
+  $(function() {
+    Dashing.gridsterLayout('[{"col":1,"row":1,"size_x":1,"size_y":1},{"col":1,"row":2,"size_x":2,"size_y":1},{"col":1,"row":3,"size_x":2,"size_y":1},{"col":2,"row":1,"size_x":3,"size_y":1},{"col":3,"row":2,"size_x":2,"size_y":2}]')
+    Dashing.widget_base_dimensions = [246, 218]
+    Dashing.numColumns = 4
+  });
+</script>
+
+<% content_for :title do %>The Guild Dashboard<% end %>
+
+<div class="gridster">
+  <ul>
+    <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+      <div data-id="people_checked_in" data-view="Number" data-title="Members checked in"></div>
+    </li>
+
+    <li data-row="1" data-col="1" data-sizex="2" data-sizey="1">
+      <div data-id="calendar_events" data-pre="0" data-view="Calendar"></div>
+    </li>
+
+    <li data-row="1" data-col="1" data-sizex="2" data-sizey="1">
+      <div data-id="calendar_events" data-pre="1" data-view="Calendar"></div>
+    </li>
+
+    <li data-row="1" data-col="1" data-sizex="3" data-sizey="1">
+      <div data-id="verbinski" data-view="Verbinski"></div>
+    </li> 
+
+    <li data-row="1" data-col="1" data-sizex="2" data-sizey="2">
+      <div data-id="twitter_mentions" data-view="Comments" style="background-color:#ff9618;"></div>
+      <i class="icon-twitter icon-background"></i>
+    </li>
+  </ul>
+</div>

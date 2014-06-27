@@ -55,7 +55,7 @@ SCHEDULER.every '5m', :first_in => 0 do |job|
   }
 
   this_week = []
-  for day in (1..7) 
+  for day in (1..4) 
     day = forecast["daily"]["data"][day]
     this_day = {
       max_temp: day["temperatureMax"].round,

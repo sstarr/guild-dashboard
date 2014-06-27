@@ -8,8 +8,8 @@ $light-colour: rgba(255, 255, 255, 0.7);
 $dark-colour: rgba(0, 0, 0, 0.3);
 
 // text sizes
-$info: 18px;
-$info-small: 16px;
+$info: 12px;
+$info-small: 10px;
 
 // column colours
 $cold5: #173A7F; // -20 and under
@@ -41,7 +41,7 @@ $hot: #ff5131; // 25 and above
   #right-now, #today, #this-week {
     float: left;
     width: 33.333%;
-    height: 340px;
+    height: 218px;
 
     .column-inner {
       padding: 20px 30px;
@@ -109,5 +109,11 @@ $hot: #ff5131; // 25 and above
         color: $dark-colour;
       }
     }
-  } 
+  }
+
+  #right-now {
+    .summary-wrapper {
+      margin-top: -15px !important;
+    }
+  }
 }
