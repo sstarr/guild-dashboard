@@ -1,51 +1,38 @@
 #!/usr/bin/env ruby
-require 'open-uri'
-require 'nokogiri'
-require 'date'
-require 'cgi'
+require 'net/http'
+require 'json'
+require 'active_support/core_ext/time'
 
-# Config
-# make sure your URLs end with /full, not /simple (which is default)!
-# ------
-calendars = [{name: 'Events', url: 'https://www.google.com/calendar/feeds/13jjetu8q6rdv4sj276magr55it4oonn%40import.calendar.google.com/public/full'}]
+Time.zone = "London"
 events = Array.new
 
 SCHEDULER.every '10m', :first_in => 0 do |job|
+  events_url = URI("https://spaces.nexudus.com/api/content/calendarevents?From_CalendarEvent_StartDate=#{Date.today.to_s}&size=2&orderBy=StartDate&dir=Ascending")
+  events_req = Net::HTTP::Get.new(events_url)
+  events_req.basic_auth ENV['SPACES_USER'], ENV['SPACES_PASS']
+  results = Net::HTTP.start(events_url.hostname, 80) { |http| http.request(events_req) }
+
   events = Array.new
-  min = CGI.escape(DateTime.now().to_s)
-  max = CGI.escape((DateTime.now()+7).to_s)
-  
-  calendars.each do |calendar|
-    url = calendar[:url]+"?singleevents=true&orderby=starttime&start-min=#{min}&start-max=#{max}"
-    reader = Nokogiri::XML(open(url))
-    reader.remove_namespaces!
-    reader.xpath("//feed/entry").each do |e|
-      title = e.at_xpath("./title").text
-      content = e.at_xpath("./content").text
-      when_node = e.at_xpath("./when")
-      events.push({
-        title: title,
-        body: "",
-        calendar: calendar[:name],
-        when_start_raw: when_node ? DateTime.iso8601(when_node.attribute('startTime').text).to_time.to_i : 0,
-        when_end_raw: when_node ? DateTime.iso8601(when_node.attribute('endTime').text).to_time.to_i : 0,
-        when_start: when_node ? DateTime.iso8601(when_node.attribute('startTime').text).to_s : "No time",
-        when_end: when_node ? DateTime.iso8601(when_node.attribute('endTime').text).to_s : "No time"
-      })
-    end
+
+  JSON.parse(results.body)["Records"].each do |event|
+    events.push({
+      calendar: "Events",
+      title: event["Name"],
+      body: "",
+      when_start: DateTime.iso8601(event["StartDate"]).to_s,
+      when_end: DateTime.iso8601(event["EndDate"]).to_s,
+      when_start_raw: DateTime.iso8601(event["StartDate"]).to_time.to_i,
+      when_end_raw: DateTime.iso8601(event["EndDate"]).to_time.to_i
+    })
   end
 
-  events.sort! { |a,b| a[:when_start_raw] <=> b[:when_start_raw] }
-  events = events.slice!(0,15) # 15 elements is probably enough...
-  
   send_event('calendar_events', { events: events })
 end
 
 SCHEDULER.every '1m', :first_in => 0 do |job|
   events_tmp = Array.new(events)
   events_tmp.delete_if{|event| DateTime.now().to_time.to_i>=event[:when_end_raw]}
-  
-      
+
   if events_tmp.count != events.count
     events = events_tmp
     send_event('calendar_events', { events: events })
