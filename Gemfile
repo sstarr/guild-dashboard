@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'dashing'
+# Dashing is dead, long live Smashing!
+# https://github.com/Smashing/smashing
+gem 'smashing'
 
 # Use nokogiri for parsing Google Calendar XML
 gem 'nokogiri'
