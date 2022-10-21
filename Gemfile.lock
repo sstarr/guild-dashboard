@@ -52,7 +52,7 @@ GEM
     multipart-post (2.1.1)
     mustermann (1.0.3)
     naught (1.1.0)
-    nokogiri (1.13.4)
+    nokogiri (1.13.9)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     nori (2.6.0)
